@@ -27,7 +27,7 @@ public class HypixelEventCalendarBot
 
     public static void main(String[] args)
     {
-        client = DiscordClientBuilder.create(args[0])
+        client = DiscordClientBuilder.create(System.getenv("TOKEN"))
                 .build()
                 .login()
                 .block();
