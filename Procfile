@@ -1,1 +1,1 @@
-web: java -jar build/libs/HypixelEventCalendarBot-1.0-all.jar
+web: java -jar build/libs/HypixelEventCalendarBot-1.0-all.jar $TOKEN
