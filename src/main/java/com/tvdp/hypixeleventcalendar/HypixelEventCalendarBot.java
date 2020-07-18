@@ -16,6 +16,7 @@ import reactor.util.function.Tuples;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Scanner;
 
 public class HypixelEventCalendarBot
 {
@@ -24,7 +25,11 @@ public class HypixelEventCalendarBot
 
     public static void main(String[] args)
     {
-        GatewayDiscordClient client = DiscordClientBuilder.create(args[0])
+        System.out.print("Token: ");
+        Scanner scanner = new Scanner(System.in);
+        String token = scanner.nextLine();
+
+        GatewayDiscordClient client = DiscordClientBuilder.create(token)
                 .build()
                 .login()
                 .block();
