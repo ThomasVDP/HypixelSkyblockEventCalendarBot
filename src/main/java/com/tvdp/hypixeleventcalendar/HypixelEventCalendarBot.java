@@ -25,11 +25,7 @@ public class HypixelEventCalendarBot
 
     public static void main(String[] args)
     {
-        System.out.print("Token: ");
-        Scanner scanner = new Scanner(System.in);
-        String token = scanner.nextLine();
-
-        GatewayDiscordClient client = DiscordClientBuilder.create(token)
+        GatewayDiscordClient client = DiscordClientBuilder.create(args[0])
                 .build()
                 .login()
                 .block();
