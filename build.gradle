@@ -20,6 +20,9 @@ repositories {
     mavenCentral()
 }
 
+task stage(dependsOn: ['shadowJar', 'clean'])
+shadowJar.mustRunAfter clean
+
 dependencies {
     implementation 'com.discord4j:discord4j-core:3.1.0.RC4'
 
