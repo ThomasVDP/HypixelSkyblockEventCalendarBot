@@ -34,7 +34,7 @@ public class HypixelEventCalendarBot
 
         long channelIdMain = 733664471066738719L;
         long channelIdTest = 726125979193573427L;
-        botChannel = client.getChannelById(Snowflake.of(channelIdTest)).flatMap(channel -> Mono.just((MessageChannel)channel));
+        botChannel = client.getChannelById(Snowflake.of(channelIdMain)).flatMap(channel -> Mono.just((MessageChannel)channel));
 
         client.getEventDispatcher().on(ReadyEvent.class)
                 .subscribe(event -> {
