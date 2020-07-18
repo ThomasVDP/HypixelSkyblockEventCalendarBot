@@ -1,6 +1,8 @@
 package com.tvdp.hypixeleventcalendar;
 
 import com.tvdp.hypixeleventcalendar.command.Command;
+import com.tvdp.hypixeleventcalendar.command.SubscribeCommand;
+import com.tvdp.hypixeleventcalendar.command.UnSubscribeCommand;
 import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
@@ -16,16 +18,16 @@ import reactor.util.function.Tuples;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Scanner;
 
 public class HypixelEventCalendarBot
 {
     public static final Map<String, Tuple2<Boolean, Command>> commands = new HashMap<>();
     public static Mono<MessageChannel> botChannel;
+    public static GatewayDiscordClient client;
 
     public static void main(String[] args)
     {
-        GatewayDiscordClient client = DiscordClientBuilder.create(args[0])
+        client = DiscordClientBuilder.create(args[0])
                 .build()
                 .login()
                 .block();
@@ -68,6 +70,8 @@ public class HypixelEventCalendarBot
     static {
         commands.put("bing!", Tuples.of(true, event -> event.getMessage().getChannel().flatMap(channel -> channel.createMessage("Bong!")).then()));
         commands.put("!bing", Tuples.of(true, event -> event.getMessage().getChannel().flatMap(channel -> channel.createMessage("Bong!")).then()));
+        commands.put("!subscribe", Tuples.of(true, new SubscribeCommand()));
+        commands.put("!unsubscribe", Tuples.of(true, new UnSubscribeCommand()));
 
         //add rhythm bot
         commands.put("!p", Tuples.of(false, HypixelEventCalendarBot::denyRhythmbot));
