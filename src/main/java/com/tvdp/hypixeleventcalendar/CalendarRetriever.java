@@ -114,7 +114,9 @@ public class CalendarRetriever
     public void print30minutes(JsonObject obj)
     {
         String message = getEventName(obj.get("type").getAsString()) + " in 30 minutes!";
-        HypixelEventCalendarBot.botChannel.flatMap(messageChannel -> messageChannel.createEmbed(embedCreateSpec -> embedCreateSpec.setColor(Color.GREEN).setTitle(message))).subscribe();
+        if (!obj.get("type").getAsString().equals("darkAuction")) {
+            HypixelEventCalendarBot.botChannel.flatMap(messageChannel -> messageChannel.createEmbed(embedCreateSpec -> embedCreateSpec.setColor(Color.GREEN).setTitle(message))).subscribe();
+        }
 
         subscribers.forEach((option, snowflakes) -> {
             if (obj.get("type").getAsString().equals(option)) {
@@ -128,7 +130,9 @@ public class CalendarRetriever
     public void print10minutes(JsonObject obj)
     {
         String message = getEventName(obj.get("type").getAsString()) + " in 10 minutes!";
-        HypixelEventCalendarBot.botChannel.flatMap(messageChannel -> messageChannel.createEmbed(embedCreateSpec -> embedCreateSpec.setColor(Color.GREEN).setTitle(message))).subscribe();
+        if (!obj.get("type").getAsString().equals("darkAuction")) {
+            HypixelEventCalendarBot.botChannel.flatMap(messageChannel -> messageChannel.createEmbed(embedCreateSpec -> embedCreateSpec.setColor(Color.GREEN).setTitle(message))).subscribe();
+        }
 
         subscribers.forEach((option, snowflakes) -> {
             if (obj.get("type").getAsString().equals(option)) {
@@ -163,7 +167,9 @@ public class CalendarRetriever
                     } else {
                         message.set(message.get() + "!");
                     }*/
-                    HypixelEventCalendarBot.botChannel.flatMap(messageChannel -> messageChannel.createEmbed(embedCreateSpec -> embedCreateSpec.setColor(Color.GREEN).setTitle(message))).subscribe();
+                    if (!obj.get("type").getAsString().equals("darkAuction")) {
+                        HypixelEventCalendarBot.botChannel.flatMap(messageChannel -> messageChannel.createEmbed(embedCreateSpec -> embedCreateSpec.setColor(Color.GREEN).setTitle(message))).subscribe();
+                    }
 
                     subscribers.forEach((option, snowflakes) -> {
                         if (obj.get("type").getAsString().equals(option)) {
