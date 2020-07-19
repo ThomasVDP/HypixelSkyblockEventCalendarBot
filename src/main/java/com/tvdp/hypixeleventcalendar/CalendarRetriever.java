@@ -27,7 +27,7 @@ public class CalendarRetriever
     private final ScheduledExecutorService scheduler;
     private final HttpClient httpClient;
 
-    public static final String[] TYPES = new String[] { "zoo", "magmaBoss", "jerryWorkshopEvent", "darkAuction", "newYear", "spookyFestival", "winterEvent" };
+    public static final String[] TYPES = new String[] { "zoo", "jerryWorkshopEvent", "darkAuction", "newYear", "spookyFestival", "winterEvent" };
     public static Map<String, List<Snowflake>> subscribers = new HashMap<>();
 
     public CalendarRetriever()
@@ -40,7 +40,7 @@ public class CalendarRetriever
     public void requestTimers()
     {
         getTimerForType("zoo/estimate").whenComplete(scheduleTimer());
-        getTimerForType("bosstimer/magma/estimatedSpawn").whenComplete(scheduleTimer());
+        //getTimerForType("bosstimer/magma/estimatedSpawn").whenComplete(scheduleTimer());
         getTimerForType("darkauction/estimate").whenComplete(scheduleTimer());
         getTimerForType("newyear/estimate").whenComplete(scheduleTimer());
         getTimerForType("spookyFestival/estimate").whenComplete(scheduleTimer());
