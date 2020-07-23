@@ -1,1 +1,1 @@
-release: java -jar $JAVA_OPTS -Dserver.port=$PORT build/libs/HypixelEventCalendarBot-1.0-all.jar
+wss: java -jar $JAVA_OPTS -Dserver.port=$PORT build/libs/HypixelEventCalendarBot-1.0-all.jar

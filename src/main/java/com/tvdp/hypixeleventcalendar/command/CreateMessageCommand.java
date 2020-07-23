@@ -7,6 +7,8 @@ import discord4j.core.object.reaction.ReactionEmoji;
 import discord4j.rest.util.Color;
 import discord4j.rest.util.Permission;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class CreateMessageCommand implements Command
 {
     @Override
@@ -18,7 +20,14 @@ public class CreateMessageCommand implements Command
                     .filter(user -> event.getMessage().getChannel().map(channel -> !(channel instanceof PrivateChannel)).block())
                     .map(user -> user.asMember(event.getGuildId().get())
                             .filter(member -> !member.getRoleIds().isEmpty())
-                            .map(member -> member.getHighestRole().map(role -> role.getPermissions().contains(Permission.ADMINISTRATOR)).block()).block()
+                            .map(member -> {
+                                AtomicBoolean found = new AtomicBoolean(false);
+                                member.getRoles().doOnNext(role -> {
+                                    if (role.getPermissions().contains(Permission.ADMINISTRATOR))
+                                        found.set(true);
+                                }).subscribe();
+                                return found.get();
+                            }).block()
                 ).orElse(false);
     }
 
