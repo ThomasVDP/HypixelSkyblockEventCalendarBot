@@ -6,7 +6,6 @@ import discord4j.core.object.entity.Guild;
 import discord4j.core.object.entity.channel.PrivateChannel;
 import discord4j.rest.util.Image;
 import discord4j.rest.util.Permission;
-import reactor.core.publisher.Mono;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,7 +52,6 @@ public class CreateEmojiCommand implements Command
                                     InputStream stream = HypixelEventCalendarBot.class.getClassLoader().getResourceAsStream(name + ".png");
                                     byte[] rawImage = new byte[(int)file.length()];
                                     stream.read(rawImage);
-                                    System.out.println("Test2");
                                     event.getGuild().flatMap(guild -> guild.createEmoji(spec -> spec.setName(name).setImage(Image.ofRaw(rawImage, Image.Format.PNG)))).subscribe();
                                 } catch (IOException e) {
                                     e.printStackTrace();
