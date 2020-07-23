@@ -27,7 +27,6 @@ public class CalendarRetriever
     private final ScheduledExecutorService scheduler;
     private final HttpClient httpClient;
 
-    public static final String[] TYPES = new String[] { "zoo", "jerryWorkshopEvent", "darkAuction", "newYear", "spookyFestival", "winterEvent" };
     public static Map<String, List<Snowflake>> subscribers = new HashMap<>();
 
     public CalendarRetriever()
@@ -96,27 +95,31 @@ public class CalendarRetriever
             long s = duration.getSeconds();
             long minutes = duration.toMinutes();
 
+            AtomicReference<JsonObject> objRef = new AtomicReference<>(obj);
+
             if (minutes >= 30) {
-                scheduler.schedule(() -> print30minutes(obj), duration.minus(30, ChronoUnit.MINUTES).getSeconds(), TimeUnit.SECONDS);
+                scheduler.schedule(() -> print30minutes(objRef), duration.minus(30, ChronoUnit.MINUTES).getSeconds(), TimeUnit.SECONDS);
             }
 
 
             if (minutes > 10) {
-                scheduler.schedule(() -> print10minutes(obj), duration.minus(10, ChronoUnit.MINUTES).getSeconds(), TimeUnit.SECONDS);
+                scheduler.schedule(() -> print10minutes(objRef), duration.minus(10, ChronoUnit.MINUTES).getSeconds(), TimeUnit.SECONDS);
             }
 
-            scheduler.schedule(() -> printStarted(obj), duration.getSeconds(), TimeUnit.SECONDS);
+            scheduler.schedule(() -> printStarted(objRef), duration.getSeconds(), TimeUnit.SECONDS);
 
             System.out.println(obj.get("type").getAsString() + " over " + String.format("%d days %02d:%02d:%02d h", s / 3600 / 24, (s / 3600) % 24, (s % 3600) / 60, (s % 60)));
         };
     }
 
-    public void print30minutes(JsonObject obj)
+    public void print30minutes(AtomicReference<JsonObject> objRef)
     {
+        JsonObject obj = objRef.get();
+
         String message = getEventName(obj.get("type").getAsString()) + " in 30 minutes!";
-        if (!obj.get("type").getAsString().equals("darkAuction")) {
-            HypixelEventCalendarBot.botChannel.flatMap(messageChannel -> messageChannel.createEmbed(embedCreateSpec -> embedCreateSpec.setColor(Color.GREEN).setTitle(message))).subscribe();
-        }
+        /*if (!obj.get("type").getAsString().equals("darkAuction")) {
+            //HypixelEventCalendarBot.botChannel.flatMap(messageChannel -> messageChannel.createEmbed(embedCreateSpec -> embedCreateSpec.setColor(Color.GREEN).setTitle(message))).subscribe();
+        }*/
 
         subscribers.forEach((option, snowflakes) -> {
             if (obj.get("type").getAsString().equals(option)) {
@@ -125,14 +128,26 @@ public class CalendarRetriever
                         .flatMap(privateChannelMono -> privateChannelMono.createEmbed(embedCreateSpec -> embedCreateSpec.setColor(Color.GREEN).setTitle(message))).subscribe());
             }
         });
+
+        getTimerForType(obj.get("urlLink").getAsString()).whenComplete((response, throwable) -> {
+            if (throwable != null) {
+                throwable.printStackTrace();
+                return;
+            }
+            if (!response.has("success")) return;
+            System.out.println("Updated in 30 last minutes: " + response.get("type").getAsString());
+            objRef.set(response);
+        });
     }
 
-    public void print10minutes(JsonObject obj)
+    public void print10minutes(AtomicReference<JsonObject> objRef)
     {
+        JsonObject obj = objRef.get();
+
         String message = getEventName(obj.get("type").getAsString()) + " in 10 minutes!";
-        if (!obj.get("type").getAsString().equals("darkAuction")) {
+        /*if (!obj.get("type").getAsString().equals("darkAuction")) {
             HypixelEventCalendarBot.botChannel.flatMap(messageChannel -> messageChannel.createEmbed(embedCreateSpec -> embedCreateSpec.setColor(Color.GREEN).setTitle(message))).subscribe();
-        }
+        }*/
 
         subscribers.forEach((option, snowflakes) -> {
             if (obj.get("type").getAsString().equals(option)) {
@@ -141,10 +156,22 @@ public class CalendarRetriever
                         .flatMap(privateChannelMono -> privateChannelMono.createEmbed(embedCreateSpec -> embedCreateSpec.setColor(Color.GREEN).setTitle(message))).subscribe());
             }
         });
+
+        getTimerForType(obj.get("urlLink").getAsString()).whenComplete((response, throwable) -> {
+            if (throwable != null) {
+                throwable.printStackTrace();
+                return;
+            }
+            if (!response.has("success")) return;
+            System.out.println("Updated in ten last minutes: " + response.get("type").getAsString());
+            objRef.set(response);
+        });
     }
 
-    public void printStarted(JsonObject obj)
+    public void printStarted(AtomicReference<JsonObject> objRef)
     {
+        JsonObject obj = objRef.get();
+
         if (Math.abs(Duration.between(Instant.now(), Instant.ofEpochMilli(obj.get("estimate").getAsLong())).getSeconds()) < 2)
         {
             System.out.println(obj.get("urlLink").getAsString());
@@ -167,9 +194,9 @@ public class CalendarRetriever
                     } else {
                         message.set(message.get() + "!");
                     }*/
-                    if (!obj.get("type").getAsString().equals("darkAuction")) {
+                    /*if (!obj.get("type").getAsString().equals("darkAuction")) {
                         HypixelEventCalendarBot.botChannel.flatMap(messageChannel -> messageChannel.createEmbed(embedCreateSpec -> embedCreateSpec.setColor(Color.GREEN).setTitle(message))).subscribe();
-                    }
+                    }*/
 
                     subscribers.forEach((option, snowflakes) -> {
                         if (obj.get("type").getAsString().equals(option)) {
