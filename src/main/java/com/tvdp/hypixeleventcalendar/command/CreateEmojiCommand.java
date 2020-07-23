@@ -6,6 +6,7 @@ import discord4j.core.object.entity.Guild;
 import discord4j.core.object.entity.channel.PrivateChannel;
 import discord4j.rest.util.Image;
 import discord4j.rest.util.Permission;
+import reactor.core.publisher.Mono;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +24,14 @@ public class CreateEmojiCommand implements Command
                         .filter(user -> event.getMessage().getChannel().map(channel -> !(channel instanceof PrivateChannel)).block())
                         .map(user -> user.asMember(event.getGuildId().get())
                                 .filter(member -> !member.getRoleIds().isEmpty())
-                                .map(member -> member.getHighestRole().map(role -> role.getPermissions().contains(Permission.ADMINISTRATOR)).block()).block()
+                                .map(member -> {
+                                    AtomicBoolean found = new AtomicBoolean(false);
+                                    member.getRoles().doOnNext(role -> {
+                                        if (role.getPermissions().contains(Permission.ADMINISTRATOR))
+                                            found.set(true);
+                                    }).subscribe();
+                                    return found.get();
+                                }).block()
                         ).orElse(false);
     }
 
@@ -45,6 +53,7 @@ public class CreateEmojiCommand implements Command
                                     InputStream stream = HypixelEventCalendarBot.class.getClassLoader().getResourceAsStream(name + ".png");
                                     byte[] rawImage = new byte[(int)file.length()];
                                     stream.read(rawImage);
+                                    System.out.println("Test2");
                                     event.getGuild().flatMap(guild -> guild.createEmoji(spec -> spec.setName(name).setImage(Image.ofRaw(rawImage, Image.Format.PNG)))).subscribe();
                                 } catch (IOException e) {
                                     e.printStackTrace();
