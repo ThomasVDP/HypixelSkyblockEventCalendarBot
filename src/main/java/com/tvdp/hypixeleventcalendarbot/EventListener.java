@@ -3,6 +3,7 @@ package com.tvdp.hypixeleventcalendarbot;
 import com.tvdp.hypixeleventcalendarbot.command.Command;
 import com.tvdp.hypixeleventcalendarbot.command.CreateEmojisCommand;
 import com.tvdp.hypixeleventcalendarbot.command.CreateMessageCommand;
+import com.tvdp.hypixeleventcalendarbot.command.RestoreSubscriptionsCommand;
 import com.tvdp.hypixeleventcalendarbot.reaction.Reaction;
 import com.tvdp.hypixeleventcalendarbot.reaction.SubscribeReaction;
 import net.dv8tion.jda.api.events.message.MessageBulkDeleteEvent;
@@ -29,6 +30,7 @@ public class EventListener extends ListenerAdapter
     public EventListener() {
         commands.add(new CreateEmojisCommand());
         commands.add(new CreateMessageCommand());
+        commands.add(new RestoreSubscriptionsCommand());
 
         List<String> names = new ArrayList<>();
         names.add("Zoo");

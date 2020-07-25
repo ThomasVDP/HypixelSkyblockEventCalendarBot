@@ -1,6 +1,6 @@
 plugins {
     id 'application'
-    id 'com.github.johnrengelman.shadow' version '5.2.0'
+    id 'com.github.johnrengelman.shadow' version '6.0.0'
 }
 
 mainClassName = 'com.tvdp.hypixeleventcalendarbot.HypixelEventCalendarBot'
@@ -11,6 +11,8 @@ version '1.0'
 sourceCompatibility = targetCompatibility = 8
 
 repositories {
+    mavenCentral()
+
     jcenter()
 }
 

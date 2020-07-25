@@ -2,6 +2,7 @@ package com.tvdp.hypixeleventcalendarbot.reaction;
 
 import com.tvdp.hypixeleventcalendarbot.CalendarRetriever;
 import com.tvdp.hypixeleventcalendarbot.EventListener;
+import net.dv8tion.jda.api.entities.ISnowflake;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent;
@@ -24,6 +25,7 @@ public class SubscribeReaction implements Reaction
             list.add(event.getUserId());
             CalendarRetriever.subscribers.put(emoteName, list);
         }
+        System.out.println("Subscribed for " + emoteName);
     }
 
     @Override
@@ -34,17 +36,20 @@ public class SubscribeReaction implements Reaction
             CalendarRetriever.subscribers.get(emoteName).remove(event.getUserId());
             EventListener.savedMessageIds.forEach((messageId, channelId) -> {
                 if (!messageId.equals(event.getMessageId())) {
-                    ((TextChannel)event.getJDA().getGuildChannelById(channelId)).retrieveMessageById(messageId).queue(message -> event.getJDA().getGuildChannelById(channelId).getGuild().getEmotes().forEach(emote -> {
-                        if (emote.getName().equals(event.getReactionEmote().getEmote().getName())) {
-                            message.removeReaction(emote, event.getJDA().getUserById(event.getUserId())).queue();
-                        }
-                    }));
+                    ((TextChannel)event.getJDA().getGuildChannelById(channelId)).retrieveMessageById(messageId).queue(message -> {
+                        message.getReactions().forEach(messageReaction -> {
+                            if (event.getReactionEmote().getName().equals(messageReaction.getReactionEmote().getName())) {
+                                messageReaction.removeReaction(event.getJDA().getUserById(event.getUserId())).queue();
+                                System.out.println("unsubbed!");
+                            }
+                        });
+                    });
                 }
             });
         }
     }
 
-    public String getInteralName(String emojiName)
+    public static String getInteralName(String emojiName)
     {
         switch (emojiName)
         {
