@@ -24,7 +24,7 @@ public interface Command
 
         AtomicBoolean found = new AtomicBoolean(false);
         event.getMember().getRoles().forEach(role -> {
-            if (role.getPermissions().contains(permission) || role.getPermissions().contains(Permission.ADMINISTRATOR)) {
+            if (role.getPermissions().contains(permission) || role.getPermissions().contains(Permission.ADMINISTRATOR) || event.getMember().isOwner()) {
                 found.set(true);
             }
         });
