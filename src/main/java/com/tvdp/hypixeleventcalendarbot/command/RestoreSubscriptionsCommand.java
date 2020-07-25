@@ -23,7 +23,6 @@ public class RestoreSubscriptionsCommand implements Command
     public void execute(MessageReceivedEvent event)
     {
         Pattern pattern = Pattern.compile("^hp!restoreFrom (?<id>\\d+?)$");
-        System.out.println(event.getMessage().getContentRaw());
         Matcher m = pattern.matcher(event.getMessage().getContentRaw());
         if (m.find())
         {
@@ -42,13 +41,11 @@ public class RestoreSubscriptionsCommand implements Command
                                             if (CalendarRetriever.subscribers.containsKey(emoteName)) {
                                                 if (!CalendarRetriever.subscribers.get(emoteName).contains(user.getId())) {
                                                     CalendarRetriever.subscribers.get(emoteName).add(user.getId());
-                                                    System.out.println("Subscribed");
                                                 }
                                             } else {
                                                 List<String> list = new ArrayList<>();
                                                 list.add(user.getId());
                                                 CalendarRetriever.subscribers.put(emoteName, list);
-                                                System.out.println("Subscribed!");
                                             }
                                         }
                                     });

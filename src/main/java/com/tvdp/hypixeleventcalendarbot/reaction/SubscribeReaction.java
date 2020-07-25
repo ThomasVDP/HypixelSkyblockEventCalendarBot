@@ -25,7 +25,6 @@ public class SubscribeReaction implements Reaction
             list.add(event.getUserId());
             CalendarRetriever.subscribers.put(emoteName, list);
         }
-        System.out.println("Subscribed for " + emoteName);
     }
 
     @Override
@@ -40,7 +39,6 @@ public class SubscribeReaction implements Reaction
                         message.getReactions().forEach(messageReaction -> {
                             if (event.getReactionEmote().getName().equals(messageReaction.getReactionEmote().getName())) {
                                 messageReaction.removeReaction(event.getJDA().getUserById(event.getUserId())).queue();
-                                System.out.println("unsubbed!");
                             }
                         });
                     });
