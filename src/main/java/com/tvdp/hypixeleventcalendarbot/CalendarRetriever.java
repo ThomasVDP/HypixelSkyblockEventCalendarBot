@@ -122,7 +122,9 @@ public class CalendarRetriever
 
         subscribers.forEach((option, userIds) -> {
             if (obj.get("type").getAsString().equals(option)) {
-                userIds.forEach(id -> HypixelEventCalendarBot.api.getUserById(id).openPrivateChannel().queue(channel -> channel.sendMessage(new MessageEmbed(null, message, null, EmbedType.RICH, null, Color.GREEN.getRGB(), null, null, null, null, null, null, null)).queue()));
+                userIds.forEach(id -> HypixelEventCalendarBot.api.getUserById(id).openPrivateChannel()
+                        .flatMap(channel -> channel.sendMessage(new MessageEmbed(null, message, null, EmbedType.RICH, null, Color.GREEN.getRGB(), null, null, null, null, null, null, null)))
+                        .queue());
             }
         });
 
@@ -148,7 +150,9 @@ public class CalendarRetriever
 
         subscribers.forEach((option, userIds) -> {
             if (obj.get("type").getAsString().equals(option)) {
-                userIds.forEach(id -> HypixelEventCalendarBot.api.getUserById(id).openPrivateChannel().queue(channel -> channel.sendMessage(new MessageEmbed(null, message, null, EmbedType.RICH, null, Color.GREEN.getRGB(), null, null, null, null, null, null, null)).queue()));
+                userIds.forEach(id -> HypixelEventCalendarBot.api.getUserById(id).openPrivateChannel()
+                        .flatMap(channel -> channel.sendMessage(new MessageEmbed(null, message, null, EmbedType.RICH, null, Color.GREEN.getRGB(), null, null, null, null, null, null, null)))
+                        .queue());
             }
         });
 
@@ -195,7 +199,9 @@ public class CalendarRetriever
 
                     subscribers.forEach((option, userIds) -> {
                         if (obj.get("type").getAsString().equals(option)) {
-                            userIds.forEach(id -> HypixelEventCalendarBot.api.getUserById(id).openPrivateChannel().queue(channel -> channel.sendMessage(new MessageEmbed(null, message, null, EmbedType.RICH, null, Color.GREEN.getRGB(), null, null, null, null, null, null, null)).queue()));
+                            userIds.forEach(id -> HypixelEventCalendarBot.api.getUserById(id).openPrivateChannel()
+                                    .flatMap(channel -> channel.sendMessage(new MessageEmbed(null, message, null, EmbedType.RICH, null, Color.GREEN.getRGB(), null, null, null, null, null, null, null)))
+                                    .queue());
                         }
                     });
                 });
