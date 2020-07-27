@@ -37,6 +37,7 @@ public class RestoreSubscriptionsCommand implements Command
                                 messageReaction.retrieveUsers().queue(users -> {
                                     users.forEach(user -> {
                                         if (!user.isBot()) {
+                                            System.out.println(user.getName());
                                             String emoteName = SubscribeReaction.getInteralName(messageReaction.getReactionEmote().getName());
                                             if (CalendarRetriever.subscribers.containsKey(emoteName)) {
                                                 if (!CalendarRetriever.subscribers.get(emoteName).contains(user.getId())) {
